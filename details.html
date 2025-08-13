@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Group Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .details-box {
+      padding: 20px;
+      border-radius: 10px;
+      background: #e6f4ff;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="details-box">
+  <h2>Visitor/vendor Details</h2>
+  <p><strong>Group ID:</strong> <span id="groupId"></span></p>
+  <div id="result">Loading...</div>
+</div>
+
+<script>
+  // Get groupId from URL
+  const params = new URLSearchParams(window.location.search);
+  const groupId = params.get("groupId");
+  document.getElementById("groupId").textContent = groupId || "Not found";
+
+  // Fetch data from Power Automate flow
+  async function fetchGroupData(groupId) {
+    const url = "https://prod-40.japaneast.logic.azure.com:443/workflows/6e348cdb26c0415599d082846fb25c4f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_G9XKnmwgwQlQMvrd29KkAjANMIwmipspY7vAya3BhY";
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ groupId })
+      });
+
+      const data = await res.json();
+      // ✅ Debugging: Show the raw response for testing
+    console.log("Raw Response:", data);
+
+      if (data.status === "success" && data.data) {
+           const peopleHtml = data.data.map((info, i) => `
+          <div class="user-entry"  style="line-height: 2;">
+            <strong>Name:</strong> ${info.name || "N/A"}<br>
+            <strong>Nationality:</strong> ${info.nationality || "N/A"}<br>
+            <strong>IC Number:</strong> ${info.icNumber || "N/A"}<br>
+            <strong>Vehicle No:</strong> ${info.vehicleNo || "N/A"}<br>
+            <strong>Purpose:</strong> ${info.purpose || "N/A"}<br>
+            <strong>Company:</strong> ${info.company || "N/A"}<br>
+            <strong>Host Name:</strong> ${info.hostName || "N/A"}<br>
+            <strong>Expected Timeout:</strong> ${info.TimeOutExpected || "N/A"}<br>
+            <strong>Declarations:</strong> ${info.declaration || "N/A"}<br>
+            <strong>Description:</strong> ${info.declarationDescriptions || "N/A"}<br>
+            <strong>Type:</strong> ${info.declarationTypes || "N/A"}<br>
+            <strong>Specify Others:</strong> ${info.specifyOthers || "N/A"}<br>
+            <strong>Declaration Quantity:</strong> ${info.declarationQuantity || "N/A"}<br>
+          </div>
+        `).join("");
+
+        document.getElementById("result").innerHTML = peopleHtml;
+
+      } else {
+        document.getElementById("result").innerHTML = `<strong>No data found for Group ID: ${groupId}</strong>`;
+      }
+    } catch (error) {
+      document.getElementById("result").innerHTML = `<strong>Error fetching data: ${error.message}</strong>`;
+    }
+  }
+
+  // Call fetch when page loads
+  if (groupId) {
+    fetchGroupData(groupId);
+  } else {
+    document.getElementById("result").innerHTML = `<strong>Invalid or missing groupId in URL.</strong>`;
+  }
+</script>
+
+</body>
+</html>
