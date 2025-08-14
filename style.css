@@ -1,0 +1,136 @@
+body {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #2A289D;
+    color: white;
+    box-sizing: border-box; /* Add this */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    color: black;
+    width: 100%; /* Add this */
+    box-sizing: border-box; /* Add this */
+}
+
+label {
+    margin-top: 10px;
+    font-weight: bold;
+    display: block; /* Ensure labels are block elements */
+}
+
+input, select, textarea {
+    margin-bottom: 15px;
+    padding: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: white;
+    color: black;
+    border: 1.5px solid black;
+    max-width: 100%; /* Ensure they don't overflow */
+}
+
+.hidden {
+    display: none;
+}
+
+.person-section {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    width: 100%; /* Add this */
+    box-sizing: border-box; /* Add this */
+}
+
+.person-section h3 {
+    margin-top: 0;
+}
+
+.field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%; /* Add this */
+}
+
+.field-row > div {
+    flex: 1 1 45%;
+    min-width: 200px;
+    box-sizing: border-box; /* Add this */
+}
+
+.declaration {
+    margin-bottom: 10px;
+    width: 100%; /* Add this */
+}
+
+button {
+    padding: 10px;
+    background-color: #2A289D;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+    width: 100%; /* Make buttons full width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button:hover {
+    background-color: #1d1d80;
+}
+
+
+/* Improved media query */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    form {
+        padding: 15px;
+    }
+    
+    .field-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .field-row > div {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+    
+    button {
+        max-width: 100%;
+    }
+    
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    h2 {
+        font-size: 1.2em;
+    }
+    
+    input, select, textarea {
+        padding: 6px;
+    }
+}
