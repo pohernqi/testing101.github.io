@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renesas Semiconductor Sdn. Bhd Vendor Pass</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <h1 style="font-size: 2em; margin-bottom: 5px;">Renesas Semiconductor Sdn. Bhd.</h1>
+        <h2 style="font-size: 1.5em; margin-top: 0;">Vendor Pass</h2>
+        <img src="renesas-logo.png" alt="Renesas Logo" style="max-width: 200px; margin: 0 auto 20px; display: block;">
+    </div>
+    <form id="visitorForm">
+        <!-- Group or Personal -->
+        <label for="groupType">Are you coming in as a group or personal?</label>
+        <select id="groupType" onchange="toggleGroup()">
+            <option value="personal">Personal</option>
+            <option value="group">Group</option>
+        </select>
+
+        <!-- Personal Visitor Info -->
+        <div id="personalInfo">
+            <h3>Personal Visitor Information</h3>
+            <label for="personalName">Name:</label>
+            <input type="text" id="personalName" name="personalName" required>
+
+            <label for="personalNationality">Nationality:</label>
+            <select id="personalNationality" name="personalNationality" required></select>
+
+            <label for="personalIC">IC Number/ Passport Num:</label>
+            <input type="text" id="personalIC" name="personalIC" required>
+
+            <label for="personalPhone">Phone Number:</label>
+            <input type="tel" id="personalPhone" name="personalPhone" required
+                placeholder="e.g., 60123456789">
+
+            <label for="personalVehicle">Vehicle No. (optional):</label>
+                    <input type="text" id="personalVehicle" placeholder="e.g., PND1234" >
+        </div>
+
+        <!-- Group Visitor Info -->
+        <div id="groupSize" class="hidden">
+            <label for="numPeople">How many people in the group?</label>
+            <input type="number" id="numPeople" min="1" onchange="enableGenerateButton()">
+        </div>
+        <button type="button" id="generateFields" class="hidden" onclick="generateIndividualFields()">Generate
+            Individual Fields</button>
+        <div id="individualFields"></div>
+
+        <!-- Shared Fields -->
+        <div id="sharedFields">
+            <div class="field-row">
+                <div>
+                    <label for="hostName">Host's Name:</label>
+                    <input type="text" id="hostName" required>
+                </div>
+                <div>
+                    <label for="sharedCompany">Company:</label>
+                    <input type="text" id="sharedCompany" required>
+                </div>
+            </div>
+
+
+            <div class="field-row">
+                <div>
+                    <!-- Schedule Visit Option -->
+                    <label>Do you want to schedule a visit date?</label>
+                    <select id="scheduleVisit" onchange="toggleVisitDate()">
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+
+                </div>
+
+            <div id="visitDateSection" class="hidden">
+                <label for="visitDate">Select Visit Date:</label>
+                <input type="datetime-local" id="visitDate" name="visitDate">
+            </div>
+            </div>
+            
+
+            <div class="field-row">
+                <div>
+                    <label for="sharedPurpose">Purpose of Visit:</label>
+                    <textarea id="sharedPurpose" required style="width: 100%; height: 100px;"></textarea>
+                </div>
+            </div>
+
+            <label>Anything to declare?</label>
+
+            <table>
+                <tr>
+                    <td style="text-align: left;">
+                        <input type="radio" id="declareYes" name="declare" value="yes" onchange="toggleDeclaration()">
+                    </td>
+                    <td style="text-align: left;">
+                        <label for="declareYes">Yes</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">
+                        <input type="radio" id="declareNo" name="declare" value="no" onchange="toggleDeclaration()"
+                            checked>
+                    </td>
+                    <td style="text-align: left;">
+                        <label for="declareNo">No</label>
+                    </td>
+                </tr>
+            </table>
+
+
+
+            <div id="declarationSection" class="hidden">
+                <h2>Declaration Form</h2>
+                <div id="declarations">
+                    <div class="declaration">
+                        <div class="field-row">
+                            <div>
+                                <label>Type:</label>
+                                <select class="type" onchange="toggleOthers(this)">
+                                    <option value="USB">USB</option>
+                                    <option value="laptop">Laptop</option>
+                                    <option value="others">Others</option>
+                                </select>
+                                <input type="text" class="others-type hidden" placeholder="Specify others">
+                            </div>
+                            <div>
+                                <label>Quantity:</label>
+                                <input type="number" class="quantity" min="1" value="1">
+                            </div>
+                            <div>
+                                <label>Description:</label>
+                                <input type="text" class="desc">
+                            </div>
+                            <div style="flex-basis:100%; width:100%;">
+                                <button type="button" onclick="removeDeclaration(this)">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addDeclaration()">Add Another Item</button>
+            </div>
+        </div>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="vendor_pass.js"></script>
+</body>
+
+</html>

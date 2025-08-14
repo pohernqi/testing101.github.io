@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Group Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #2A289D;
+    }
+
+    .details-box {
+      padding: 20px;
+      border-radius: 10px;
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table tr {
+      height: 35px;
+      /* Fixed height for all rows */
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="text-align: center; color: white; padding: 15px 10px; border-radius: 10px; margin-bottom: 20px;">
+    <div style="font-weight: bold; font-size: 24px; font-family: Arial, sans-serif;">
+      Renesas Semiconductor Sdn. Bhd.
+    </div>
+    <div style="font-size: 18px; color: white; font-family: Arial, sans-serif; margin-top: 5px;">
+      Vendor/Visitor System
+    </div>
+  </div>
+
+  <div class="details-box">
+    <h2>Visitor/vendor Details</h2>
+    <p><strong>Group ID:</strong> <span id="groupId"></span></p>
+    <div id="result">Loading...</div>
+  </div>
+
+  <script>
+    // Get groupId from URL
+    const params = new URLSearchParams(window.location.search);
+    const groupId = params.get("groupId");
+    document.getElementById("groupId").textContent = groupId || "Not found";
+
+    // Fetch data from Power Automate flow
+    async function fetchGroupData(groupId) {
+      const url = "https://prod-40.japaneast.logic.azure.com:443/workflows/6e348cdb26c0415599d082846fb25c4f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_G9XKnmwgwQlQMvrd29KkAjANMIwmipspY7vAya3BhY";
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ groupId })
+        });
+
+        const data = await res.json();
+        // ✅ Debugging: Show the raw response for testing
+        console.log("Raw Response:", data);
+
+        if (data.status === "success" && data.data) {
+          const peopleHtml = data.data.map((info, i) => `
+          <table>
+            
+  <tr>
+    <td><strong>Name:</strong></td>
+    <td>${info.name || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Nationality:</strong></td>
+    <td>${info.nationality || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>IC Number:</strong></td>
+    <td>${info.icNumber || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Vehicle No:</strong></td>
+    <td>${info.vehicleNo || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Purpose:</strong></td>
+    <td>${info.purpose || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Company:</strong></td>
+    <td>${info.company || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Host Name:</strong></td>
+    <td>${info.hostName || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Declarations:</strong></td>
+    <td>${info.declaration || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Type:</strong></td>
+    <td>${info.declarationTypes || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Description:</strong></td>
+    <td>${info.declarationDescriptions || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Specify Others:</strong></td>
+    <td>${info.specifyOthers || "N/A"}</td>
+  </tr>
+  <tr>
+    <td><strong>Declaration Quantity:</strong></td>
+    <td>${info.declarationQuantity || "N/A"}</td>
+  </tr>
+</table>
+        `).join("");
+
+          document.getElementById("result").innerHTML = peopleHtml;
+
+        } else {
+          document.getElementById("result").innerHTML = `<strong>No data found for Group ID: ${groupId}</strong>`;
+        }
+      } catch (error) {
+        document.getElementById("result").innerHTML = `<strong>Error fetching data: ${error.message}</strong>`;
+      }
+    }
+
+    // Call fetch when page loads
+    if (groupId) {
+      fetchGroupData(groupId);
+    } else {
+      document.getElementById("result").innerHTML = `<strong>Invalid or missing groupId in URL.</strong>`;
+    }
+  </script>
+
+</body>
+
+</html>
